@@ -1,0 +1,23 @@
+# Create a new docker network or use an existing one
+
+services:
+  app:
+    image: "pasinduakalpa/big-agi:latest"
+    container_name: bigagi
+    restart: unless-stopped
+    ports:
+      - "4000:3000"
+
+    environment:
+      HTTP_BASIC_AUTH_USERNAME: "user@example.com"
+      HTTP_BASIC_AUTH_PASSWORD: "changeme"
+
+      OPENAI_API_KEY: ""
+      GEMINI_API_KEY: ""
+      ELEVENLABS_API_KEY: ""
+    networks:
+      - custom_network
+
+networks:
+  custom_network:
+    external: true
