@@ -1,0 +1,16 @@
+# This is a sample dynamic yaml file
+
+http:
+  routers:
+    nginx-new:
+      entrypoints:
+        - web
+        - websecure
+      service: nginx_new
+      rule: Host(`service2.mdataz.com`)
+
+  services:
+    nginx_new:
+      loadBalancer:
+        servers:
+          - url: http://nginx_new

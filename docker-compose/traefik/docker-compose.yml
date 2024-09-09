@@ -1,0 +1,26 @@
+# Create docker network named traefik
+# -- (Optional) Create dynamic configuration directory in /etc/traefik/dynamic
+# Create traefik.yaml in /etc/traefik/traefik.yaml
+
+services:
+  traefik:
+    image: traefik:3.1.2
+    container_name: traefik
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+      # -- (Optional) Enable Dashboard, don't do in production
+      - 8080:8080
+    volumes:
+      - /run/docker.sock:/run/docker.sock:ro
+      - /etc/traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - /etc/traefik/dynamic/:/etc/traefik/dynamic/
+      - /etc/traefik/conf/:/etc/traefik/conf/
+      - /etc/traefik/certs/:/etc/traefik/certs/
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    external: true
