@@ -10,6 +10,8 @@ services:
       - db-data:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - custom_network
 
   plausible_events_db:
     image: clickhouse/clickhouse-server:24.3.3.102-alpine
@@ -23,6 +25,8 @@ services:
       nofile:
         soft: 262144
         hard: 262144
+    networks:
+      - custom_network
 
   plausible:
     # official image only available on GitHub Container Registry(GHCR) this is the image for v2.1.1 pushed to Docker Hub
@@ -48,6 +52,8 @@ services:
       - SMTP_USER_PWD
       - SMTP_HOST_SSL_ENABLED
       - SMTP_RETRIES
+    networks:
+      - custom_network
 
 volumes:
   db-data:
