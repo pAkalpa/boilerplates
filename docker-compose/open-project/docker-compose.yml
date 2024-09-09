@@ -1,0 +1,25 @@
+# Create a new docker network or use an existing one
+
+services:
+  app:
+    image: openproject/openproject:14
+    restart: unless-stopped
+    container_name: openproject_app
+    ports:
+      - 9500:80
+    environment:
+      - OPENPROJECT_HOST__NAME
+      - OPENPROJECT_SECRET_KEY_BASE
+    volumes:
+      - pgdata:/var/openproject/pgdata
+      - assets:/var/openproject/assets
+    networks:
+      - custom_network
+
+networks:
+  custom_network:
+    external: true
+
+volumes:
+  pgdata:
+  assets:
