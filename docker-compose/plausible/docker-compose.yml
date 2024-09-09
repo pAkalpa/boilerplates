@@ -1,0 +1,59 @@
+# Create a new docker network or use an existing one
+
+services:
+  plausible_db:
+    # Plausible v2.1.1 was tested against PostgreSQL versions 15 and 16
+    # https://github.com/plausible/analytics/blob/v2.1.1/.github/workflows/elixir.yml#L21-L32
+    image: postgres:16-alpine
+    restart: always
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+
+  plausible_events_db:
+    image: clickhouse/clickhouse-server:24.3.3.102-alpine
+    restart: always
+    volumes:
+      - event-data:/var/lib/clickhouse
+      - event-logs:/var/log/clickhouse-server
+      - /home/pasinduakalpa1998/plausible/clickhouse/clickhouse-config.xml:/etc/clickhouse-server/config.d/logging.xml:ro
+      - /home/pasinduakalpa1998/plausible/clickhouse/clickhouse-user-config.xml:/etc/clickhouse-server/users.d/logging.xml:ro
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+  plausible:
+    # official image only available on GitHub Container Registry(GHCR) this is the image for v2.1.1 pushed to Docker Hub
+    image: pasinduemp/plausible:v2.1.1
+    container_name: plausible
+    restart: always
+    command: sh -c "sleep 10 && /entrypoint.sh db createdb && /entrypoint.sh db migrate && /entrypoint.sh run"
+    depends_on:
+      - plausible_db
+      - plausible_events_db
+    ports:
+      - 8500:8000
+    environment:
+      - BASE_URL
+      - SECRET_KEY_BASE
+      - TOTP_VAULT_KEY
+      - DISABLE_REGISTRATION
+      - MAILER_EMAIL
+      - MAILER_NAME
+      - SMTP_HOST_ADDR
+      - SMTP_HOST_PORT
+      - SMTP_USER_NAME
+      - SMTP_USER_PWD
+      - SMTP_HOST_SSL_ENABLED
+      - SMTP_RETRIES
+
+volumes:
+  db-data:
+  event-data:
+  event-logs:
+
+networks:
+  custom_network:
+    external: true
