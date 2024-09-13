@@ -1,0 +1,5 @@
+# rename this file to .env
+POSTGRES_PASSWORD= # generate a random password openssl rand -base64 36
+POSTGRES_USER=authentik-db-user
+POSTGRES_DB=authentik-db
+AUTHENTIK_SECRET_KEY= # generate a random password openssl rand -base64 60
