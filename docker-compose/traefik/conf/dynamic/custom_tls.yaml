@@ -1,0 +1,16 @@
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /etc/traefik/certs/default.crt
+        keyFile: /etc/traefik/certs/default.key
+    localdev:
+      certificates:
+        - certFile: /etc/traefik/certs/localdev.com.crt
+          keyFile: /etc/traefik/certs/localdev.com.key
+
+
+# tls:
+#   certificates:
+#     - certFile: /etc/traefik/certs/localdev.com.crt
+#       keyFile: /etc/traefik/certs/localdev.com.key
