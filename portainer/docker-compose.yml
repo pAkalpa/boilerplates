@@ -1,0 +1,26 @@
+services:
+  portainer:
+    image: portainer/portainer-ce:2.21.1
+    container_name: portainer
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.localdev.com`)"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.service=portainer"
+      - "traefik.http.routers.portainer.tls=true" # Enable TLS self signed certificate
+      # - "traefik.http.routers.frontend.tls.certresolver=leresolver" # Enable TLS Let's Encrypt certificate
+    networks:
+      - traefik
+
+volumes:
+  portainer_data:
+
+networks:
+  traefik:
+    external: true
