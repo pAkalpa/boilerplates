@@ -9,6 +9,7 @@ tls:
         - certFile: /etc/traefik/certs/localdev.com.crt
           keyFile: /etc/traefik/certs/localdev.com.key
 
+# traefik.http.routers.my-service.tls.store=localdev
 
 # tls:
 #   certificates:
